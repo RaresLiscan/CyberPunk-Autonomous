@@ -101,6 +101,8 @@ public class DepouAutonomous extends LinearOpMode {
 
         robot.stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         runtime.reset();
         robot.stangaFata.setPower(power);
@@ -150,7 +152,7 @@ public class DepouAutonomous extends LinearOpMode {
 //        }
 //    }
 
-    public void runEncodersLateral (int distance, double power, double timeoutS) {
+    public void runEncodersLateral (int distance, double power, double timeoutS) { // -1 e stanga, 1 dreapta
         robot.stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -163,6 +165,9 @@ public class DepouAutonomous extends LinearOpMode {
 
         robot.stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 
         runtime.reset();
         robot.stangaFata.setPower(power);
@@ -216,9 +221,9 @@ public class DepouAutonomous extends LinearOpMode {
 
     public void leftGold()
     {
-        runEncoders(625, 0.25, 15);
+        runEncoders(625, 0.25, 10);
         rotate(0.25,1, 40);
-        runEncoders(1550, 0.25, 30);
+        runEncoders(1550, 0.25, 10);
         telemetry.addLine();
         telemetry.addData("Position", "left");
         telemetry.update();
@@ -227,8 +232,8 @@ public class DepouAutonomous extends LinearOpMode {
 
     public void centerGold()
     {
-        runEncoders(650,0.05,15);
-        runEncoders(2300,0.15,15);
+        runEncoders(650,0.1,10);
+        runEncoders(2300,0.3,10);
         telemetry.addLine();
         telemetry.addData("Position", "center");
         telemetry.update();
@@ -237,9 +242,9 @@ public class DepouAutonomous extends LinearOpMode {
 
     public void rightGold()
     {
-        runEncoders(625, 0.25, 15);
+        runEncoders(625, 0.25, 10);
         rotate(0.25,-1, -40);
-        runEncoders(1727, 0.25, 30);
+        runEncoders(1727, 0.25, 10);
         telemetry.addLine();
         telemetry.addData("Position", "right");
         telemetry.update();
@@ -252,18 +257,23 @@ public class DepouAutonomous extends LinearOpMode {
         if(goldPos==0) //left
         {
             rotate(0.25, -1, -40);
-            runEncoders(1850,0.25,15);
+            runEncoders(1850,0.25,15); // Catre depou
         }
 
-        if(goldPos==1) //right
+        else if(goldPos==1) //right
         {
-            rotate(0.25, 1, 35);
-            runEncoders(1617,0.25,15);
-            rotate(0.25, -1, -45);
+            rotate(0.25, 1, 35); // Fata spre cubul din dreapta
+            runEncoders(1617,0.25,15); // Spre depou
         }
 
+        rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
         /*Dau drumul la robot.servoMarker*/
         robot.servoMarker.setPosition(0);
+        runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
+        rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
+        robot.extindereBrat.setPower(0.4); // "Parcare"
+        sleep(1500);
+        robot.extindereBrat.setPower(0);
     }
 
 
@@ -279,6 +289,8 @@ public class DepouAutonomous extends LinearOpMode {
 
         runtime.reset();
 
+
+        robot.servoCarlig.setPosition(0.5);
         robot.bratStanga.setPower(power);
         robot.bratDreapta.setPower(power);
 
@@ -289,6 +301,7 @@ public class DepouAutonomous extends LinearOpMode {
 
         robot.bratStanga.setPower(0);
         robot.bratDreapta.setPower(0);
+        robot.servoCarlig.setPosition(0);
     }
 
     int goldPos = -1;
@@ -348,55 +361,55 @@ public class DepouAutonomous extends LinearOpMode {
 
         if (opModeIsActive()) {
             /** Activate Tensor Flow Object Detection. */
-//
-//
-//            if (tfod != null) {
-//                tfod.activate();
-//            }
-//
-//
-//
-//            runtime.reset();
-//
-//            while (goldPos == -1 && tfod != null && runtime.seconds() < 5) {
-//                telemetry.addData("in","while" );
-//                telemetry.update();
-//                // getUpdatedRecognitions() will return null if no new information is available since
-//                // the last time that call was made.
-//                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-//                if (updatedRecognitions != null) {
-//                    telemetry.addData("# Object Detected", updatedRecognitions.size());
-//                    if (updatedRecognitions.size() <= 3) {
-//                        int goldMineralX = -1;
-//                        int silverMineral1X = -1;
-//                        int silverMineral2X = -1;
-//                        for (Recognition recognition : updatedRecognitions) {
-//                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-//                                goldMineralX = (int) recognition.getLeft();
-//                                recognition.getTop();
-//                            } else if (silverMineral1X == -1) {
-//                                silverMineral1X = (int) recognition.getLeft();
-//                            } else {
-//                                silverMineral2X = (int) recognition.getLeft();
-//                            }
-//                        }
-//                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-//                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-//                                goldPos = 0;
-//                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-//                                goldPos = 1;
-//                            } else {
-//                                goldPos = 2;
-//                            }
-//                        }
-//                    }
-//
-//                }
-//            }
-//
-//            tfod.shutdown();
 
-            land(0.3, 500, 5);
+
+            if (tfod != null) {
+                tfod.activate();
+            }
+
+
+
+            runtime.reset();
+
+            while (goldPos == -1 && tfod != null && runtime.seconds() < 5) {
+                telemetry.addData("in","while" );
+                telemetry.update();
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null) {
+                    telemetry.addData("# Object Detected", updatedRecognitions.size());
+                    if (updatedRecognitions.size() <= 3) {
+                        int goldMineralX = -1;
+                        int silverMineral1X = -1;
+                        int silverMineral2X = -1;
+                        for (Recognition recognition : updatedRecognitions) {
+                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                goldMineralX = (int) recognition.getLeft();
+                                recognition.getTop();
+                            } else if (silverMineral1X == -1) {
+                                silverMineral1X = (int) recognition.getLeft();
+                            } else {
+                                silverMineral2X = (int) recognition.getLeft();
+                            }
+                        }
+                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                                goldPos = 0;
+                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                                goldPos = 1;
+                            } else {
+                                goldPos = 2;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            tfod.shutdown();
+
+            land(0.3, 500, 2); // Detensionare servoLock
 
             if(goldPos != -1) {
                 if (goldPos == 0) {
