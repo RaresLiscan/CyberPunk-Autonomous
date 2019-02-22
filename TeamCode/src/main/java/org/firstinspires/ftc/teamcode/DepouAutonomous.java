@@ -120,6 +120,8 @@ public class DepouAutonomous extends LinearOpMode {
     }
 
 
+
+
 //    public void runLateral (int direction, int distance, double power, double timeoutS) {   ///Direction = 1 => stanga / Direction = -1 => dreapta
 //        ///Mers stanga:
 //        if (direction == 1) {
@@ -302,6 +304,48 @@ public class DepouAutonomous extends LinearOpMode {
         robot.bratStanga.setPower(0);
         robot.bratDreapta.setPower(0);
         robot.servoCarlig.setPosition(0);
+    }
+
+    private void releaseMinerals (double power, int timeout, int degrees, int direction) {
+
+
+        robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.bratStanga.setTargetPosition(900);
+        robot.bratDreapta.setTargetPosition(-900);
+
+        robot.bratStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.bratDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.bratStanga.setPower(power);
+        robot.bratDreapta.setPower(power);
+        robot.miscareCutie.setPower(1);
+
+        while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && opModeIsActive() && runtime.seconds() < timeout);
+
+        sleep(2000);
+        robot.miscareCutie.setPower(0);
+
+        rotate(power, direction, degrees);
+
+        robot.bratDreapta.setTargetPosition(-400);
+        robot.bratStanga.setTargetPosition(400);
+
+        runtime.reset();
+
+        while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && runtime.seconds() < timeout);
+
+        robot.miscareCutie.setPower(0.5);
+        sleep(2000);
+        robot.miscareCutie.setPower(0);
+
+    }
+
+    public void testFindGold () {
+        runEncoders(50, 0.25, 15);
+        rotate(0.25, 1, 225);
+        releaseMinerals(0.25, 15, -45, -1);
+        rotate(0.25, 1, 180);
     }
 
     int goldPos = -1;
