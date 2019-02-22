@@ -253,17 +253,17 @@ public class DepouAutonomous extends LinearOpMode {
 
     public void afterMineral(int goldPos)
     {
-        /* Daca minerala a fost in stanga, robotul mi se invarte 45 la dreapta, analog pt celalat if*/
+        /* Daca minerala a fost in stanga, robotul mi se invarte 23 la dreapta, analog pt celalat if*/
         if(goldPos==0) //left
         {
-            rotate(0.25, -1, -40);
+            rotate(0.25, -1, -23);
             runEncoders(1850,0.25,15); // Catre depou
         }
 
         else if(goldPos==1) //right
         {
-            rotate(0.25, 1, 35); // Fata spre cubul din dreapta
-            runEncoders(1617,0.25,15); // Spre depou
+            rotate(0.25, 1, 23); // Fata spre cubul din dreapta
+            runEncoders(1617,0.25,15); // Catre depou
         }
 
         rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
@@ -436,7 +436,8 @@ public class DepouAutonomous extends LinearOpMode {
 
             else {
 
-                runEncoders(2650, 0.15, 10);
+                runEncoders(2650, 0.3, 10);
+                runEncodersLateral(-1500, 0.15, 4);
                 runtime.reset();
 
                 while(runtime.seconds() < 5) {
@@ -459,9 +460,11 @@ public class DepouAutonomous extends LinearOpMode {
                     if (L == 1) {
                         telemetry.addData("Cube: ", "Left");
                     }
+
                     else if (R == 1) {
                         telemetry.addData("Cube: ", "Center");
                     }
+
                     else {
                         telemetry.addData("Cube: ", "Right");
                     }
@@ -472,42 +475,44 @@ public class DepouAutonomous extends LinearOpMode {
 
 
                 if (L == 1) {
-                    //runLateral(1,50, 0.15, 3);
-                    runEncoders(800, 0.15, 6);
-                    //runLateral(-1, 40, 0.15, 4);
-                    runEncoders(600, 0.15, 4);
-                    rotate(0.15, 1, 45);
+                    runEncodersLateral(-350, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+                    rotate(0.3, -1, -23);
+                    runEncoders(1850,0.25,15);
+                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
+                    /*Dau drumul la robot.servoMarker*/
                     robot.servoMarker.setPosition(0);
-                    sleep(2500);
-                    robot.servoMarker.setPosition(1);
-                    runEncodersLateral(1250, 0.25, 10);
-                    rotate(0.2,-1,135);
-                    runEncoders(-1,0.25,3);
+                    runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
+                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
+                    robot.extindereBrat.setPower(0.4); // "Parcare"
+                    sleep(1500);
+                    robot.extindereBrat.setPower(0);
 
                 }
                 else if (R == 1) {
-                    runEncoders(2500,0.15,6);
-                    rotate(0.15,1,45);
+                    runEncodersLateral(650, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+                    rotate(0.25, 1, 23); // Fata spre cubul din dreapta
+                    runEncoders(1617,0.25,15); // Catre depou
+                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
+                    /*Dau drumul la robot.servoMarker*/
                     robot.servoMarker.setPosition(0);
-                    sleep(2500);
-                    robot.servoMarker.setPosition(1);
-                    runEncodersLateral(1250, 0.25, 10);
-                    rotate(0.2,-1,180);
-                    runEncoders(-1,0.25,3);
+                    runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
+                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
+                    robot.extindereBrat.setPower(0.4); // "Parcare"
+                    sleep(1500);
+                    robot.extindereBrat.setPower(0);
                 }
                 else {
-                    //runLateral(-1,50,0.15,3);
-                    runEncoders(800,0.2,6);
+                    runEncodersLateral(350, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+                    runEncoders(3000,0.2,6);
                     //runLateral(1, 40, 0.15, 4);
-                    runEncoders(600, 0.15, 4);
-                    rotate(0.15,1,45);
-                    runEncoders(1000,0.2,4);
+                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
+                    /*Dau drumul la robot.servoMarker*/
                     robot.servoMarker.setPosition(0);
-                    sleep(2500);
-                    robot.servoMarker.setPosition(1);
-                    runEncodersLateral(1250, 0.25, 10);
-                    rotate(0.2,-1,135);
-                    runEncoders(-1,0.25,3);
+                    runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
+                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
+                    robot.extindereBrat.setPower(0.4); // "Parcare"
+                    sleep(1500);
+                    robot.extindereBrat.setPower(0);
                 }
 
 
