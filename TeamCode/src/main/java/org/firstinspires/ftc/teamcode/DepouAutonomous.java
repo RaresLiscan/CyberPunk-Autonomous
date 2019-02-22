@@ -319,33 +319,76 @@ public class DepouAutonomous extends LinearOpMode {
         robot.bratDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.bratStanga.setPower(power);
         robot.bratDreapta.setPower(power);
-        robot.miscareCutie.setPower(1);
+        robot.miscareCutie.setPower(0.2);
 
         while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && opModeIsActive() && runtime.seconds() < timeout);
 
-        sleep(2000);
+        robot.bratStanga.setPower(0);
+        robot.bratDreapta.setPower(0);
         robot.miscareCutie.setPower(0);
 
         rotate(power, direction, degrees);
 
+        robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         robot.bratDreapta.setTargetPosition(-400);
         robot.bratStanga.setTargetPosition(400);
+
+        robot.bratStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.bratDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.bratStanga.setPower(power);
+        robot.bratDreapta.setPower(power);
 
         runtime.reset();
 
         while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && runtime.seconds() < timeout);
 
-        robot.miscareCutie.setPower(0.5);
+        robot.bratDreapta.setPower(0);
+        robot.bratStanga.setPower(0);
+
+        robot.miscareCutie.setPower(0.3);
         sleep(2000);
         robot.miscareCutie.setPower(0);
 
     }
 
-    public void testFindGold () {
+    private void testFindGold () {
         runEncoders(50, 0.25, 15);
-        rotate(0.25, 1, 225);
+        rotate(0.25, -1, 135);
         releaseMinerals(0.25, 15, -45, -1);
         rotate(0.25, 1, 180);
+    }
+
+    private void extendArm (double power, int distance, double timeout) {
+
+        robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.extindereBrat.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.bratStanga.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.bratDreapta.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        robot.bratStanga.setTargetPosition(distance);
+        robot.bratDreapta.setTargetPosition(-distance);
+
+        robot.bratDreapta.setPower(power);
+        robot.bratDreapta.setPower(power);
+
+        runtime.reset();
+
+        while (robot.bratDreapta.isBusy() && robot.bratStanga.isBusy() && runtime.seconds() < timeout);
+
+        robot.bratStanga.setPower(0);
+        robot.bratDreapta.setPower(0);
+
+        robot.extindereBrat.setTargetPosition(500);
+        robot.extindereBrat.setPower(power);
+
+        while (robot.extindereBrat.isBusy() && runtime.seconds() < timeout);
+
+        robot.extindereBrat.setPower(0);
+
     }
 
     int goldPos = -1;
