@@ -17,7 +17,7 @@ public class RobotMovement {
         double gearRatio  = 2;
         int    totalTicks = 1120; // Amount of ticks for a full rotation
 
-        int ticksPerCm = (int) ((totalTicks * gearRatio) / ((wheelDiam * Math.PI));
+        int ticksPerCm = (int) ((totalTicks * gearRatio) / (wheelDiam * Math.PI));
 
         return cm * ticksPerCm;
     }
