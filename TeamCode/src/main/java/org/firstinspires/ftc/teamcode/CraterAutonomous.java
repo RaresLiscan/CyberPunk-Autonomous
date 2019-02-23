@@ -162,7 +162,6 @@ public class CraterAutonomous extends LinearOpMode {
         robot.extindereBrat.setPower(0);
     }
 
-
     int goldPos = -1;
 
 
