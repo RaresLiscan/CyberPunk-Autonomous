@@ -28,9 +28,9 @@ import java.util.List;
 
 
 
-@Autonomous(name = "DepouAutonomous")
+@Autonomous(name = "CraterAutonomous")
 //@Disabled
-public class DepouAutonomous extends LinearOpMode {
+public class CraterAutonomous extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
@@ -274,17 +274,17 @@ public class DepouAutonomous extends LinearOpMode {
                 if (goldPos == 0) {
                     telemetry.addData("Gold Mineral Position", "Left");
                     leftGold();
-                    afterMineral(goldPos);
+                    afterMineral();
 
                 } else if (goldPos == 1) {
                     telemetry.addData("Gold Mineral Position", "Right");
                     rightGold();
-                    afterMineral(goldPos);
+                    afterMineral();
 
                 } else if (goldPos == 2){
                     telemetry.addData("Gold Mineral Position", "Center");
                     centerGold();
-                    afterMineral(goldPos);
+                    afterMineral();
                 }
                 telemetry.addData("position", goldPos);
                 telemetry.update();
