@@ -292,7 +292,6 @@ public class DepouAutonomous extends LinearOpMode {
                 telemetry.addData("position", goldPos);
                 telemetry.update();
 
-                sleep(3000);
             }
 
 

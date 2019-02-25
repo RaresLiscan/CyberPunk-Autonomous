@@ -287,18 +287,16 @@ public class CraterAutonomous extends LinearOpMode {
                 }
                 telemetry.addData("position", goldPos);
                 telemetry.update();
-
-                sleep(3000);
             }
 
 
             else {
-
-                movement.runEncoders(2650, 0.3, 10);
-                movement.runEncodersLateral(-1500, 0.15, 4);
+                // Deplasare catre cubul din dreapta
+                movement.runEncoders(movement.cmToTicks(66), 0.3, 10);
+                movement.runEncodersLateral(movement.cmToTicks(21), 0.15, 4); // Senzorii de culoare indreptati spre cub sau bile
                 runtime.reset();
 
-                while(runtime.seconds() < 5) {
+                while(runtime.seconds() < 5 && L != 1 && R != 1) {
                     NormalizedRGBA colorsC = robot.colorSensorRight.getNormalizedColors();
                     NormalizedRGBA colorsL = robot.colorSensorLeft.getNormalizedColors();
 
@@ -316,15 +314,15 @@ public class CraterAutonomous extends LinearOpMode {
 
 
                     if (L == 1) {
-                        telemetry.addData("Cube: ", "Left");
+                        telemetry.addData("Cube: ", "Robot-Left");
                     }
 
                     else if (R == 1) {
-                        telemetry.addData("Cube: ", "Center");
+                        telemetry.addData("Cube: ", "Robot-Right");
                     }
 
                     else {
-                        telemetry.addData("Cube: ", "Right");
+                        telemetry.addData("Cube: ", "More left than men's bathroom");
                     }
 
 
@@ -333,44 +331,28 @@ public class CraterAutonomous extends LinearOpMode {
 
 
                 if (L == 1) {
-                    movement.runEncodersLateral(-350, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
-                    rotate(0.3, -1, -23);
-                    movement.runEncoders(1850,0.25,15);
-                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
-                    /*Dau drumul la robot.servoMarker*/
-                    robot.servoMarker.setPosition(0);
-                    movement.runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
-                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
-                    robot.extindereBrat.setPower(0.4); // "Parcare"
-                    sleep(1500);
-                    robot.extindereBrat.setPower(0);
-
+                    movement.runEncodersLateral(movement.cmToTicks(-21), 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+                    movement.runEncoders(movement.cmToTicks(10), 0.3, 2);
+                    movement.runEncoders(movement.cmToTicks(-16), 0.3, 3); // Miscare cub si revenire la pozitia din TensorFlow ca sa nu mai gandesc atata cod :*
+                    movement.runEncodersLateral(movement.cmToTicks(-160), 0.3, 4); // Deplasare spre culoar
+                    rotate(0.25, -1, -45); // Orientare cu spatele la depou
+                    afterMineral();
                 }
                 else if (R == 1) {
-                    movement.runEncodersLateral(650, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
-                    rotate(0.25, 1, 23); // Fata spre cubul din dreapta
-                    movement.runEncoders(1617,0.25,15); // Catre depou
-                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
-                    /*Dau drumul la robot.servoMarker*/
-                    robot.servoMarker.setPosition(0);
-                    movement.runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
-                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
-                    robot.extindereBrat.setPower(0.4); // "Parcare"
-                    sleep(1500);
-                    robot.extindereBrat.setPower(0);
+                    movement.runEncodersLateral(movement.cmToTicks(23), 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+                    movement.runEncoders(movement.cmToTicks(10), 0.3, 2);
+                    movement.runEncoders(movement.cmToTicks(-16), 0.3, 2); // Miscare cub si revenire la pozitia din TensorFlow
+                    movement.runEncodersLateral(movement.cmToTicks(-200), 0.3, 4); // Deplasare spre culoar
+                    rotate(0.25, -1, -45); // Orientare cu spatele la depou
+                    afterMineral();
                 }
                 else {
-                    movement.runEncodersLateral(350, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
-                    movement.runEncoders(3000,0.2,6);
-                    //runLateral(1, 40, 0.15, 4);
-                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
-                    /*Dau drumul la robot.servoMarker*/
-                    robot.servoMarker.setPosition(0);
-                    movement.runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
-                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
-                    robot.extindereBrat.setPower(0.4); // "Parcare"
-                    sleep(1500);
-                    robot.extindereBrat.setPower(0);
+                    movement.runEncodersLateral(movement.cmToTicks(-64), 0.2, 8); // Deplasare cu centrul robotului in fata cubului
+                    movement.runEncoders(movement.cmToTicks(10), 0.3, 2);
+                    movement.runEncoders(movement.cmToTicks(-16), 0.3, 2);
+                    movement.runEncodersLateral(movement.cmToTicks(-120), 0.3, 4); // Deplasare spre culoar
+                    rotate(0.25, -1, -45); // Orientare cu spatele la depou
+                    afterMineral();
                 }
 
 
