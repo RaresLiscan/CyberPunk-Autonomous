@@ -107,6 +107,63 @@ public class CraterAutonomous extends LinearOpMode {
         }
     }
 
+
+    private void releaseMinerals (double power, int timeout, int degrees, int direction) {
+
+
+        robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.bratStanga.setTargetPosition(900);
+        robot.bratDreapta.setTargetPosition(-900);
+
+        robot.bratStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.bratDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.bratStanga.setPower(power);
+        robot.bratDreapta.setPower(power);
+        robot.miscareCutie.setPower(0.2);
+
+        while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && opModeIsActive() && runtime.seconds() < timeout);
+
+        robot.bratStanga.setPower(0);
+        robot.bratDreapta.setPower(0);
+        robot.miscareCutie.setPower(0);
+
+        rotate(power, direction, degrees);
+
+        robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.bratDreapta.setTargetPosition(-400);
+        robot.bratStanga.setTargetPosition(400);
+
+        robot.bratStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.bratDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.bratStanga.setPower(power);
+        robot.bratDreapta.setPower(power);
+
+        runtime.reset();
+
+        while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && runtime.seconds() < timeout);
+
+        robot.bratDreapta.setPower(0);
+        robot.bratStanga.setPower(0);
+
+        robot.miscareCutie.setPower(0.3);
+        sleep(2000);
+        robot.miscareCutie.setPower(0);
+
+    }
+
+    private void testFindGold () {
+        movement.runEncoders(50, 0.25, 15);
+        rotate(0.25, -1, 135);
+        releaseMinerals(0.25, 15, -45, -1);
+        rotate(0.25, 1, 180);
+    }
+
+
     /** Presupunem ca gold mineral e la 70cm distanta de robot */
 
     public void leftGold()
