@@ -5,18 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -27,8 +22,6 @@ import java.util.Locale;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
-import org.firstinspires.ftc.teamcode.RobotMap;
 
 
 import java.util.List;
@@ -41,7 +34,6 @@ public class DepouAutonomous extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
-
     BNO055IMU imu;
     Orientation angles;
     Acceleration gravity;
@@ -75,116 +67,10 @@ public class DepouAutonomous extends LinearOpMode {
     //End of Vuforia / Tensorflow methods
     //Start of motor declarations and custom methods
 
-    private ElapsedTime runtime = new ElapsedTime();
+    ElapsedTime runtime = new ElapsedTime();
     RobotMap robot = new RobotMap();
-
-
-    public void stopDriving()
-    {
-        robot.stangaFata.setPower(0);
-        robot.stangaSpate.setPower(0);
-        robot.dreaptaFata.setPower(0);
-        robot.dreaptaSpate.setPower(0);
-    }
-
+    RobotMovement movement = new RobotMovement(robot, runtime);
     public int L,R;
-    public void runEncoders (int distance, double power, double timeoutS) {
-        robot.stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.stangaFata.setTargetPosition(-distance);
-        robot.dreaptaFata.setTargetPosition(distance);
-        robot.stangaSpate.setTargetPosition(-distance);
-        robot.dreaptaSpate.setTargetPosition(distance);
-
-        robot.stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        runtime.reset();
-        robot.stangaFata.setPower(power);
-        robot.dreaptaFata.setPower(power);
-        robot.stangaFata.setPower(power);
-        robot.dreaptaFata.setPower(power);
-
-
-        while ( (robot.stangaFata.isBusy() && robot.dreaptaFata.isBusy() && robot.stangaSpate.isBusy() && robot.dreaptaSpate.isBusy()) && opModeIsActive() && (runtime.seconds() < timeoutS))
-        {
-            //Wait for the motors to run
-        }
-
-        stopDriving();
-    }
-
-
-
-
-//    public void runLateral (int direction, int distance, double power, double timeoutS) {   ///Direction = 1 => stanga / Direction = -1 => dreapta
-//        ///Mers stanga:
-//        if (direction == 1) {
-//            while (distanceStanga.getDistance(DistanceUnit.CM) > distance && runtime.seconds() < timeoutS) {
-//                robot.stangaFata.setPower(power);
-//                robot.stangaSpate.setPower(-power);
-//                robot.dreaptaFata.setPower(power);
-//                robot.dreaptaSpate.setPower(-power);
-//            }
-//
-//            robot.stangaFata.setPower(0);
-//            robot.stangaSpate.setPower(0);
-//            robot.dreaptaFata.setPower(0);
-//            robot.dreaptaSpate.setPower(0);
-//        }
-//
-//        ///Mers dreapta
-//        else if (direction == -1) {
-//            while (distanceDreapta.getDistance(DistanceUnit.CM) > distance && runtime.seconds() < timeoutS) {
-//                robot.stangaFata.setPower(power);
-//                robot.stangaSpate.setPower(-power);
-//                robot.dreaptaFata.setPower(-power);
-//                robot.dreaptaSpate.setPower(power);
-//            }
-//
-//            robot.stangaFata.setPower(0);
-//            robot.stangaSpate.setPower(0);
-//            robot.dreaptaFata.setPower(0);
-//            robot.dreaptaSpate.setPower(0);
-//        }
-//    }
-
-    public void runEncodersLateral (int distance, double power, double timeoutS) { // -1 e stanga, 1 dreapta
-        robot.stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.stangaFata.setTargetPosition(distance);
-        robot.dreaptaFata.setTargetPosition(-distance);
-        robot.stangaSpate.setTargetPosition(-distance);
-        robot.dreaptaSpate.setTargetPosition(distance);
-
-        robot.stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-        runtime.reset();
-        robot.stangaFata.setPower(power);
-        robot.dreaptaFata.setPower(power);
-        robot.stangaFata.setPower(power);
-        robot.dreaptaFata.setPower(power);
-
-
-        while ( (robot.stangaFata.isBusy() && robot.dreaptaFata.isBusy() && robot.stangaSpate.isBusy() && robot.dreaptaSpate.isBusy()) && opModeIsActive() && (runtime.seconds() < timeoutS))
-        {
-            //Wait for the motors to run
-        }
-
-        stopDriving();
-    }
 
 
     void rotate(double power, int direction, int degrees) {
@@ -203,7 +89,7 @@ public class DepouAutonomous extends LinearOpMode {
                 telemetry.update();
             }
 
-            stopDriving();
+            movement.stopDriving();
         }
 
         else if (direction == -1 && fa > degrees){
@@ -217,15 +103,16 @@ public class DepouAutonomous extends LinearOpMode {
                 telemetry.update();
             }
 
-            stopDriving();
+            movement.stopDriving();
         }
     }
-
+    
+    
     public void leftGold()
     {
-        runEncoders(625, 0.25, 10);
+        movement.runEncoders(625, 0.25, 10);
         rotate(0.25,1, 40);
-        runEncoders(1550, 0.25, 10);
+        movement.runEncoders(1550, 0.25, 10);
         telemetry.addLine();
         telemetry.addData("Position", "left");
         telemetry.update();
@@ -234,8 +121,8 @@ public class DepouAutonomous extends LinearOpMode {
 
     public void centerGold()
     {
-        runEncoders(650,0.1,10);
-        runEncoders(2300,0.3,10);
+        movement.runEncoders(650,0.1,10);
+        movement.runEncoders(2300,0.3,10);
         telemetry.addLine();
         telemetry.addData("Position", "center");
         telemetry.update();
@@ -244,9 +131,9 @@ public class DepouAutonomous extends LinearOpMode {
 
     public void rightGold()
     {
-        runEncoders(625, 0.25, 10);
+        movement.runEncoders(625, 0.25, 10);
         rotate(0.25,-1, -40);
-        runEncoders(1727, 0.25, 10);
+        movement.runEncoders(1727, 0.25, 10);
         telemetry.addLine();
         telemetry.addData("Position", "right");
         telemetry.update();
@@ -255,98 +142,29 @@ public class DepouAutonomous extends LinearOpMode {
 
     public void afterMineral(int goldPos)
     {
-        /* Daca minerala a fost in stanga, robotul mi se invarte 45 la dreapta, analog pt celalat if*/
+        /* Daca minerala a fost in stanga, robotul mi se invarte 23 la dreapta, analog pt celalat if*/
         if(goldPos==0) //left
         {
-            rotate(0.25, -1, -40);
-            runEncoders(1850,0.25,15); // Catre depou
+            rotate(0.25, -1, -23);
+            movement.runEncoders(1850,0.25,15); // Catre depou
         }
 
         else if(goldPos==1) //right
         {
-            rotate(0.25, 1, 35); // Fata spre cubul din dreapta
-            runEncoders(1617,0.25,15); // Spre depou
+            rotate(0.25, 1, 23); // Fata spre cubul din dreapta
+            movement.runEncoders(1617,0.25,15); // Catre depou
         }
 
         rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
         /*Dau drumul la robot.servoMarker*/
         robot.servoMarker.setPosition(0);
-        runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
+        movement.runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
         rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
         robot.extindereBrat.setPower(0.4); // "Parcare"
         sleep(1500);
         robot.extindereBrat.setPower(0);
     }
 
-
-    private void land (double power, int distance, int timeout) {
-        robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.bratStanga.setTargetPosition(-distance);
-        robot.bratDreapta.setTargetPosition(distance);
-
-        robot.bratStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.bratDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        runtime.reset();
-
-
-        robot.servoCarlig.setPosition(0.5);
-        robot.bratStanga.setPower(power);
-        robot.bratDreapta.setPower(power);
-
-
-        while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && opModeIsActive() && runtime.seconds() < timeout) {
-            // Wait for the motors to run
-        }
-
-        robot.bratStanga.setPower(0);
-        robot.bratDreapta.setPower(0);
-        robot.servoCarlig.setPosition(0);
-    }
-
-    private void releaseMinerals (double power, int timeout, int degrees, int direction) {
-
-
-        robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.bratStanga.setTargetPosition(900);
-        robot.bratDreapta.setTargetPosition(-900);
-
-        robot.bratStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.bratDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.bratStanga.setPower(power);
-        robot.bratDreapta.setPower(power);
-        robot.miscareCutie.setPower(1);
-
-        while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && opModeIsActive() && runtime.seconds() < timeout);
-
-        sleep(2000);
-        robot.miscareCutie.setPower(0);
-
-        rotate(power, direction, degrees);
-
-        robot.bratDreapta.setTargetPosition(-400);
-        robot.bratStanga.setTargetPosition(400);
-
-        runtime.reset();
-
-        while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && runtime.seconds() < timeout);
-
-        robot.miscareCutie.setPower(0.5);
-        sleep(2000);
-        robot.miscareCutie.setPower(0);
-
-    }
-
-    public void testFindGold () {
-        runEncoders(50, 0.25, 15);
-        rotate(0.25, 1, 225);
-        releaseMinerals(0.25, 15, -45, -1);
-        rotate(0.25, 1, 180);
-    }
 
     int goldPos = -1;
 
@@ -366,7 +184,7 @@ public class DepouAutonomous extends LinearOpMode {
 
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
-//        initVuforia();
+        //initVuforia(); - moved to RobotMap; still here in case it does not work TODO: Test camera with the new RobotMap
 
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -453,7 +271,7 @@ public class DepouAutonomous extends LinearOpMode {
 
             tfod.shutdown();
 
-            land(0.3, 500, 2); // Detensionare servoLock
+            movement.land(0.3, 500, 2); // Detensionare servoLock
 
             if(goldPos != -1) {
                 if (goldPos == 0) {
@@ -474,13 +292,13 @@ public class DepouAutonomous extends LinearOpMode {
                 telemetry.addData("position", goldPos);
                 telemetry.update();
 
-                sleep(3000);
             }
 
 
             else {
 
-                runEncoders(2650, 0.15, 10);
+                movement.runEncoders(2650, 0.3, 10);
+                movement.runEncodersLateral(-1500, 0.15, 4);
                 runtime.reset();
 
                 while(runtime.seconds() < 5) {
@@ -503,9 +321,11 @@ public class DepouAutonomous extends LinearOpMode {
                     if (L == 1) {
                         telemetry.addData("Cube: ", "Left");
                     }
+
                     else if (R == 1) {
                         telemetry.addData("Cube: ", "Center");
                     }
+
                     else {
                         telemetry.addData("Cube: ", "Right");
                     }
@@ -516,42 +336,44 @@ public class DepouAutonomous extends LinearOpMode {
 
 
                 if (L == 1) {
-                    //runLateral(1,50, 0.15, 3);
-                    runEncoders(800, 0.15, 6);
-                    //runLateral(-1, 40, 0.15, 4);
-                    runEncoders(600, 0.15, 4);
-                    rotate(0.15, 1, 45);
+                    movement.runEncodersLateral(-350, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+                    rotate(0.3, -1, -23);
+                    movement.runEncoders(1850,0.25,15);
+                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
+                    /*Dau drumul la robot.servoMarker*/
                     robot.servoMarker.setPosition(0);
-                    sleep(2500);
-                    robot.servoMarker.setPosition(1);
-                    runEncodersLateral(1250, 0.25, 10);
-                    rotate(0.2,-1,135);
-                    runEncoders(-1,0.25,3);
+                    movement.runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
+                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
+                    robot.extindereBrat.setPower(0.4); // "Parcare"
+                    sleep(1500);
+                    robot.extindereBrat.setPower(0);
 
                 }
                 else if (R == 1) {
-                    runEncoders(2500,0.15,6);
-                    rotate(0.15,1,45);
+                    movement.runEncodersLateral(650, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+                    rotate(0.25, 1, 23); // Fata spre cubul din dreapta
+                    movement.runEncoders(1617,0.25,15); // Catre depou
+                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
+                    /*Dau drumul la robot.servoMarker*/
                     robot.servoMarker.setPosition(0);
-                    sleep(2500);
-                    robot.servoMarker.setPosition(1);
-                    runEncodersLateral(1250, 0.25, 10);
-                    rotate(0.2,-1,180);
-                    runEncoders(-1,0.25,3);
+                    movement.runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
+                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
+                    robot.extindereBrat.setPower(0.4); // "Parcare"
+                    sleep(1500);
+                    robot.extindereBrat.setPower(0);
                 }
                 else {
-                    //runLateral(-1,50,0.15,3);
-                    runEncoders(800,0.2,6);
+                    movement.runEncodersLateral(350, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+                    movement.runEncoders(3000,0.2,6);
                     //runLateral(1, 40, 0.15, 4);
-                    runEncoders(600, 0.15, 4);
-                    rotate(0.15,1,45);
-                    runEncoders(1000,0.2,4);
+                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
+                    /*Dau drumul la robot.servoMarker*/
                     robot.servoMarker.setPosition(0);
-                    sleep(2500);
-                    robot.servoMarker.setPosition(1);
-                    runEncodersLateral(1250, 0.25, 10);
-                    rotate(0.2,-1,135);
-                    runEncoders(-1,0.25,3);
+                    movement.runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
+                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
+                    robot.extindereBrat.setPower(0.4); // "Parcare"
+                    sleep(1500);
+                    robot.extindereBrat.setPower(0);
                 }
 
 
