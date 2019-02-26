@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class RobotMovement {
+public class RobotMovement{
 
     private RobotMap robot;
     private ElapsedTime runtime;
