@@ -400,7 +400,6 @@ public class CraterAutonomous extends LinearOpMode {
                     movement.runEncoders(movement.cmToTicks(-16), 0.3, 3); // Miscare cub si revenire la pozitia din TensorFlow ca sa nu mai gandesc atata cod :*
                     movement.runEncodersLateral(movement.cmToTicks(-160), 0.3, 4); // Deplasare spre culoar
                     rotate(0.25, -1, -45); // Orientare cu spatele la depou
-                    afterMineral();
                 }
                 else if (R == 1) {
                     movement.runEncodersLateral(movement.cmToTicks(23), 0.2, 3); // Deplasare cu centrul robotului in fata cubului
@@ -408,7 +407,6 @@ public class CraterAutonomous extends LinearOpMode {
                     movement.runEncoders(movement.cmToTicks(-16), 0.3, 2); // Miscare cub si revenire la pozitia din TensorFlow
                     movement.runEncodersLateral(movement.cmToTicks(-200), 0.3, 4); // Deplasare spre culoar
                     rotate(0.25, -1, -45); // Orientare cu spatele la depou
-                    afterMineral();
                 }
                 else {
                     movement.runEncodersLateral(movement.cmToTicks(-64), 0.2, 8); // Deplasare cu centrul robotului in fata cubului
@@ -416,8 +414,8 @@ public class CraterAutonomous extends LinearOpMode {
                     movement.runEncoders(movement.cmToTicks(-16), 0.3, 2);
                     movement.runEncodersLateral(movement.cmToTicks(-120), 0.3, 4); // Deplasare spre culoar
                     rotate(0.25, -1, -45); // Orientare cu spatele la depou
-                    afterMineral();
                 }
+                afterMineral();
 
 
             }

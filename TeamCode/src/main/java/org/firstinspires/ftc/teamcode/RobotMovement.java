@@ -125,9 +125,4 @@ public class RobotMovement {
         robot.servoLock.setPosition(0);
 
     }
-
-    @Override
-    public void runOpMode() throws InterruptedException {
-
-    }
 }
