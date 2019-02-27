@@ -119,6 +119,15 @@ public class RobotMovement extends LinearOpMode {
         robot.bratStanga.setPower(0);
         robot.bratDreapta.setPower(0);
         robot.servoCarlig.setPosition(0);
+
+        robot.servoLock.setPosition(1);
+        runEncoders(300, 0.35, 3);
+        robot.servoLock.setPosition(0);
+
     }
 
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+    }
 }

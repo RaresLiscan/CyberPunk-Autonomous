@@ -121,13 +121,16 @@ public class CraterAutonomous extends LinearOpMode {
         robot.bratDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.bratStanga.setPower(power);
         robot.bratDreapta.setPower(power);
-        robot.miscareCutie.setPower(0.2);
 
         while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && opModeIsActive() && runtime.seconds() < timeout);
 
         robot.bratStanga.setPower(0);
         robot.bratDreapta.setPower(0);
         robot.miscareCutie.setPower(0);
+
+        robot.servoCutie.setPower(-1);
+        sleep(2000);
+        robot.servoCutie.setPower(0);
 
         rotate(power, direction, degrees);
 
@@ -149,6 +152,9 @@ public class CraterAutonomous extends LinearOpMode {
 
         robot.bratDreapta.setPower(0);
         robot.bratStanga.setPower(0);
+
+        robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         robot.miscareCutie.setPower(0.3);
         sleep(2000);
