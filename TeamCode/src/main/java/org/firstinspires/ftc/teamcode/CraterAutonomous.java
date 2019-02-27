@@ -174,8 +174,8 @@ public class CraterAutonomous extends LinearOpMode {
 
     public void leftGold()
     {
-        movement.runEncoders(movement.cmToTicks(60), 0.25, 3); // Deplasare in fata ca sa nu alunece pe banda izolatoare
-        movement.runEncodersLateral(movement.cmToTicks(-43), 0.3, 4); // Deplasare in fata cubului
+        movement.runEncoders(movement.cmToTicks(40), 0.25, 3); // Deplasare in fata ca sa nu alunece pe banda izolatoare
+        movement.runEncodersLateral(movement.cmToTicks(-42), 0.3, 4); // Deplasare in fata cubului
         movement.runEncoders(movement.cmToTicks(15), 0.3, 3); // Miscare cub
         movement.runEncoders(movement.cmToTicks(-15), 0.3, 3); // Inapoi la 10 cm de pozitia cubului
         movement.runEncodersLateral(movement.cmToTicks(-120), 0.3, 4); // Deplasare spre culoar
@@ -188,7 +188,7 @@ public class CraterAutonomous extends LinearOpMode {
 
     public void centerGold()
     {
-        movement.runEncoders(movement.cmToTicks(75),0.3,10); // Miscare cub de pe pozitie
+        movement.runEncoders(movement.cmToTicks(55),0.3,10); // Miscare cub de pe pozitie
         movement.runEncoders(movement.cmToTicks(-15), 0.3, 4); // 10 cm de pozitia cubului
         movement.runEncodersLateral(movement.cmToTicks(-160), 0.3, 4); // Deplasare spre culoar
         rotate(0.25, -1, -45); // Orientare cu spatele la depou
@@ -200,8 +200,8 @@ public class CraterAutonomous extends LinearOpMode {
 
     public void rightGold()
     {
-        movement.runEncoders(movement.cmToTicks(60), 0.25, 3); // Deplasare in fata ca sa nu alunece pe banda izolatoare
-        movement.runEncodersLateral(movement.cmToTicks(43), 0.3, 4); // Deplasare in fata cubului
+        movement.runEncoders(movement.cmToTicks(40), 0.25, 3); // Deplasare in fata ca sa nu alunece pe banda izolatoare
+        movement.runEncodersLateral(movement.cmToTicks(42), 0.3, 4); // Deplasare in fata cubului
         movement.runEncoders(movement.cmToTicks(15), 0.3, 3); // Miscare cub
         movement.runEncoders(movement.cmToTicks(-15), 0.3, 3); // Inapoi la 10 cm de pozitia cubului
         movement.runEncodersLateral(movement.cmToTicks(-200), 0.3, 4); // Deplasare spre culoar
@@ -220,7 +220,7 @@ public class CraterAutonomous extends LinearOpMode {
         robot.servoMarker.setPosition(0);
         movement.runEncoders(movement.cmToTicks(175), 0.3, 7); // Deplasare cu fata spre crater
 
-        robot.extindereBrat.setPower(0.4); // "Parcare"
+        robot.extindereBrat.setPower(0.3); // "Parcare"
         sleep(1500);
         robot.extindereBrat.setPower(0);
     }
