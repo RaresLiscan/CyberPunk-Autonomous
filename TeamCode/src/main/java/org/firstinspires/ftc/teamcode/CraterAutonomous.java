@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Color;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -174,8 +175,8 @@ public class CraterAutonomous extends LinearOpMode {
 
     public void leftGold()
     {
-        movement.runEncoders(movement.cmToTicks(60), 0.25, 3); // Deplasare in fata ca sa nu alunece pe banda izolatoare
-        movement.runEncodersLateral(movement.cmToTicks(-43), 0.3, 4); // Deplasare in fata cubului
+        movement.runEncoders(movement.cmToTicks(40), 0.25, 3); // Deplasare in fata ca sa nu alunece pe banda izolatoare
+        movement.runEncodersLateral(movement.cmToTicks(-42), 0.3, 4); // Deplasare in fata cubului
         movement.runEncoders(movement.cmToTicks(15), 0.3, 3); // Miscare cub
         movement.runEncoders(movement.cmToTicks(-15), 0.3, 3); // Inapoi la 10 cm de pozitia cubului
         movement.runEncodersLateral(movement.cmToTicks(-120), 0.3, 4); // Deplasare spre culoar
@@ -188,7 +189,7 @@ public class CraterAutonomous extends LinearOpMode {
 
     public void centerGold()
     {
-        movement.runEncoders(movement.cmToTicks(75),0.3,10); // Miscare cub de pe pozitie
+        movement.runEncoders(movement.cmToTicks(55),0.3,10); // Miscare cub de pe pozitie
         movement.runEncoders(movement.cmToTicks(-15), 0.3, 4); // 10 cm de pozitia cubului
         movement.runEncodersLateral(movement.cmToTicks(-160), 0.3, 4); // Deplasare spre culoar
         rotate(0.25, -1, -45); // Orientare cu spatele la depou
@@ -200,8 +201,8 @@ public class CraterAutonomous extends LinearOpMode {
 
     public void rightGold()
     {
-        movement.runEncoders(movement.cmToTicks(60), 0.25, 3); // Deplasare in fata ca sa nu alunece pe banda izolatoare
-        movement.runEncodersLateral(movement.cmToTicks(43), 0.3, 4); // Deplasare in fata cubului
+        movement.runEncoders(movement.cmToTicks(40), 0.25, 3); // Deplasare in fata ca sa nu alunece pe banda izolatoare
+        movement.runEncodersLateral(movement.cmToTicks(42), 0.3, 4); // Deplasare in fata cubului
         movement.runEncoders(movement.cmToTicks(15), 0.3, 3); // Miscare cub
         movement.runEncoders(movement.cmToTicks(-15), 0.3, 3); // Inapoi la 10 cm de pozitia cubului
         movement.runEncodersLateral(movement.cmToTicks(-200), 0.3, 4); // Deplasare spre culoar
@@ -220,7 +221,7 @@ public class CraterAutonomous extends LinearOpMode {
         robot.servoMarker.setPosition(0);
         movement.runEncoders(movement.cmToTicks(175), 0.3, 7); // Deplasare cu fata spre crater
 
-        robot.extindereBrat.setPower(0.4); // "Parcare"
+        robot.extindereBrat.setPower(0.3); // "Parcare"
         sleep(1500);
         robot.extindereBrat.setPower(0);
     }
@@ -241,9 +242,7 @@ public class CraterAutonomous extends LinearOpMode {
 
         robot.init(hardwareMap);
 
-        // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
-        // first.
-        //initVuforia(); - moved to RobotMap; still here in case it does not work TODO: Test camera with the new RobotMap
+        initVuforia();
 
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -260,6 +259,7 @@ public class CraterAutonomous extends LinearOpMode {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
 
+
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
         //colorSensor.enableLed(true);
@@ -273,34 +273,30 @@ public class CraterAutonomous extends LinearOpMode {
         robot.dreaptaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.stangaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.dreaptaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.bratStanga.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.bratDreapta.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.servoMarker.setPosition(1);
         gyroInit();
         waitForStart();
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         if (opModeIsActive()) {
+
+            movement.land(0.3, 500, 10); // Detensionare servoLock
+
             /** Activate Tensor Flow Object Detection. */
-
-
             if (tfod != null) {
                 tfod.activate();
             }
 
-
-
             runtime.reset();
 
             while (goldPos == -1 && tfod != null && runtime.seconds() < 5) {
-                telemetry.addData("in","while" );
+                telemetry.addData("in", "while");
                 telemetry.update();
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    if (updatedRecognitions.size() <= 3) {
+                    if (updatedRecognitions.size() <= 2) {
                         int goldMineralX = -1;
                         int silverMineral1X = -1;
                         int silverMineral2X = -1;
@@ -314,25 +310,24 @@ public class CraterAutonomous extends LinearOpMode {
                                 silverMineral2X = (int) recognition.getLeft();
                             }
                         }
-                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                goldPos = 0;
-                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                goldPos = 1;
-                            } else {
-                                goldPos = 2;
+                        if (goldMineralX != -1 && (silverMineral1X != -1 || silverMineral2X != -1)) {
+                            if ((goldMineralX < silverMineral1X) || (goldMineralX < silverMineral2X)) {
+                                goldPos = 0; // left
+                            } else if ((goldMineralX > silverMineral1X) || (goldMineralX > silverMineral2X)) {
+                                goldPos = 2; // center
                             }
                         }
-                    }
 
+                        else {
+                            goldPos = 1; // right
+                        }
+                    }
                 }
             }
 
             tfod.shutdown();
 
-//            movement.land(0.3, 500, 2); // Detensionare servoLock
-//            movement.land(0.3, 2000, 2);
-
+            /*
             if(goldPos != -1) {
                 if (goldPos == 0) {
                     telemetry.addData("Gold Mineral Position", "Left");
@@ -418,7 +413,7 @@ public class CraterAutonomous extends LinearOpMode {
                 afterMineral();
 
 
-            }
+            } */
 
         }
     }
@@ -440,6 +435,21 @@ public class CraterAutonomous extends LinearOpMode {
         fa = Double.parseDouble(formatAngle(angles.angleUnit, angles.firstAngle));
         sa = Double.parseDouble(formatAngle(angles.angleUnit, angles.secondAngle));
         ta = Double.parseDouble(formatAngle(angles.angleUnit, angles.thirdAngle));
+    }
+
+    private void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
 
     private void initTfod() {
