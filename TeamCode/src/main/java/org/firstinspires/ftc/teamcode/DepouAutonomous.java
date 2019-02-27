@@ -328,8 +328,6 @@ public class DepouAutonomous extends LinearOpMode {
             tfod.shutdown();
 
             movement.land(0.3, 500, 2); // Detensionare servoLock
-            movement.land(0.3, 2000, 2);
-
 
             if(goldPos != -1) {
                 if (goldPos == 0) {
