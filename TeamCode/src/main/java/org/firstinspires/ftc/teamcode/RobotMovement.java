@@ -50,8 +50,8 @@ public class RobotMovement {
         runtime.reset();
         robot.stangaFata.setPower(power);
         robot.dreaptaFata.setPower(power);
-        robot.stangaFata.setPower(power);
-        robot.dreaptaFata.setPower(power);
+        robot.stangaSpate.setPower(power);
+        robot.dreaptaSpate.setPower(power);
 
 
         while ( (robot.stangaFata.isBusy() && robot.dreaptaFata.isBusy() && robot.stangaSpate.isBusy() && robot.dreaptaSpate.isBusy()) && (runtime.seconds() < timeoutS))
@@ -82,8 +82,8 @@ public class RobotMovement {
         runtime.reset();
         robot.stangaFata.setPower(power);
         robot.dreaptaFata.setPower(power);
-        robot.stangaFata.setPower(power);
-        robot.dreaptaFata.setPower(power);
+        robot.stangaSpate.setPower(power);
+        robot.dreaptaSpate.setPower(power);
 
 
         while ( (robot.stangaFata.isBusy() && robot.dreaptaFata.isBusy() && robot.stangaSpate.isBusy() && robot.dreaptaSpate.isBusy()) &&  (runtime.seconds() < timeoutS))
@@ -95,6 +95,9 @@ public class RobotMovement {
     }
 
     void land (double power, int distance, int timeout) {
+        robot.servoCarlig.setPosition(1);
+        runtime.reset();
+
         robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -107,7 +110,6 @@ public class RobotMovement {
         runtime.reset();
 
 
-        robot.servoCarlig.setPosition(1);
         robot.bratStanga.setPower(power);
         robot.bratDreapta.setPower(power);
 
@@ -118,19 +120,17 @@ public class RobotMovement {
 
         robot.bratStanga.setPower(0);
         robot.bratDreapta.setPower(0);
-        robot.servoCarlig.setPosition(0);
-
-        robot.servoLock.setPosition(1);
-        runEncoders(300, 0.35, 3);
         robot.servoLock.setPosition(0);
 
+        runtime.reset();
+        while (runtime.seconds() < 3);
 
         // Coborare brat
         robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.bratStanga.setTargetPosition(-2000);
-        robot.bratDreapta.setTargetPosition(2000);
+        robot.bratStanga.setTargetPosition(-1200);
+        robot.bratDreapta.setTargetPosition(1200);
 
         robot.bratStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.bratDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -144,5 +144,8 @@ public class RobotMovement {
         while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && runtime.seconds() < timeout) {
             // Wait for the motors to run
         }
+
+        robot.bratStanga.setPower(0);
+        robot.bratDreapta.setPower(0);
     }
 }

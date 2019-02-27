@@ -14,8 +14,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 public class RobotMap
 {
     HardwareMap hwMap = null;
-    public static final String VUFORIA_KEY = "AVkOf0j/////AAABmRjwq1ZdP0O/htcXkMim08CHBQt3z5YM6hHnfFqlJNDQbZf/M093kM6IX5wdvKvZox6Skid1Hw1FVuIr1PLvCtHY+q771YzcambEV+cAkbH/rJ3Z+0dbdiPAH6QycOPOWJqNT38H5uW8O2iXiT5IsUnlqph2E2Vl30s8ICcLl6+4TtLskwZlsUKr5QmqJROFmzMo/BCEBqmxb1njxKmjolTZcKiBGdAHKvI+Xh4rzXzJr4MO3mrDeHyLi/QIHTx5R5u6vpfQNavMEWKXA+pMCarpR/MLPwPI7anUwfRAKXaBz08it+5Fu2c1iXh/hmwLvujZVgRWQcHyAd4k7eT49cBsZvLvrhdgxcbux1YX92Oq";
-    public VuforiaLocalizer vuforia;
+
 
     // Movement
     public DcMotor dreaptaFata  = null;
@@ -45,28 +44,9 @@ public class RobotMap
     // Constructor
     public RobotMap() {}
 
-
-    private void initVuforia() {
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hwMap.get(WebcamName.class, "Webcam 1");
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
-    }
-
-
     public void init(HardwareMap aMap)
     {
         hwMap = aMap;
-
-        initVuforia();
 
         // Hardware mapping
         dreaptaFata       = hwMap.get(DcMotor.class, "dreaptaFata");
@@ -74,8 +54,8 @@ public class RobotMap
         stangaFata        = hwMap.get(DcMotor.class, "stangaFata");
         stangaSpate       = hwMap.get(DcMotor.class, "stangaSpate");
         servoLock         = hwMap.get(Servo.class, "servoLock");
-        servoCutie        = hwMap.get(CRServo.class, "servoCutie");
-        miscareCutie      = hwMap.get(DcMotor.class, "miscareCutie");
+//        servoCutie        = hwMap.get(CRServo.class, "servoCutie");
+//        miscareCutie      = hwMap.get(DcMotor.class, "miscareCutie");
         bratStanga        = hwMap.get(DcMotor.class, "bratStanga");
         bratDreapta       = hwMap.get(DcMotor.class, "bratDreapta");
         servoCarlig       = hwMap.get(Servo.class, "servoCarlig");
@@ -86,12 +66,11 @@ public class RobotMap
 
 
 //        // Default initializations
-        servoLock.setPosition(0);
+        servoLock.setPosition(1);
         servoCarlig.setPosition(0);
-        servoMarker.setPosition(0);
+        servoMarker.setPosition(1);
 
 
-        bratStanga.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bratDreapta.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     }
 }
