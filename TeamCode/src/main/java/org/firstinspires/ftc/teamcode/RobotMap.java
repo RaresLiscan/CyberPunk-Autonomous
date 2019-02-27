@@ -31,10 +31,8 @@ public class RobotMap
     public DcMotor bratStanga  = null;
     public DcMotor bratDreapta = null;
     public Servo   servoLock   = null;
-    public Servo   servoBob    = null;
     public Servo   servoCarlig = null;
 
-    public Servo servoSenzor = null;
     public Servo servoMarker = null;
 
     // Motor care actioneaza sistemul cu ata ce extinde bratul
@@ -75,23 +73,25 @@ public class RobotMap
         dreaptaSpate      = hwMap.get(DcMotor.class, "dreaptaSpate");
         stangaFata        = hwMap.get(DcMotor.class, "stangaFata");
         stangaSpate       = hwMap.get(DcMotor.class, "stangaSpate");
-//        servoLock         = hwMap.get(Servo.class, "servoLock");
-//        servoBob          = hwMap.get(Servo.class, "servoBob");
-//        servoCutie        = hwMap.get(CRServo.class, "servoCutie");
-//        miscareCutie      = hwMap.get(DcMotor.class, "miscareCutie");
+        servoLock         = hwMap.get(Servo.class, "servoLock");
+        servoCutie        = hwMap.get(CRServo.class, "servoCutie");
+        miscareCutie      = hwMap.get(DcMotor.class, "miscareCutie");
         bratStanga        = hwMap.get(DcMotor.class, "bratStanga");
         bratDreapta       = hwMap.get(DcMotor.class, "bratDreapta");
-//        servoCarlig       = hwMap.get(Servo.class, "servoCarlig");
-//        servoSenzor       = hwMap.get(Servo.class, "servoSenzor");
+        servoCarlig       = hwMap.get(Servo.class, "servoCarlig");
         servoMarker       = hwMap.get(Servo.class, "servoMarker");
         extindereBrat     = hwMap.get(DcMotor.class, "extindereBrat");
         colorSensorRight = hwMap.get(NormalizedColorSensor.class, "colorRight" );
         colorSensorLeft   = hwMap.get(NormalizedColorSensor.class, "colorLeft" );
-//
-//
+
+
 //        // Default initializations
-//        servoLock.setPosition(0);
-//        servoBob.setPosition(0);
+        servoLock.setPosition(0);
+        servoCarlig.setPosition(0);
         servoMarker.setPosition(0);
+
+
+        bratStanga.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bratDreapta.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 }
