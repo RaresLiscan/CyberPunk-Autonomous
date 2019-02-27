@@ -119,6 +119,10 @@ public class RobotMovement {
         robot.bratStanga.setPower(0);
         robot.bratDreapta.setPower(0);
         robot.servoCarlig.setPosition(0);
-    }
 
+        robot.servoLock.setPosition(1);
+        runEncoders(300, 0.35, 3);
+        robot.servoLock.setPosition(0);
+
+    }
 }
