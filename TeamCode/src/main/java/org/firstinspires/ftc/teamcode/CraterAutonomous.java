@@ -280,79 +280,82 @@ public class CraterAutonomous extends LinearOpMode {
         if (opModeIsActive()) {
 
             movement.land(0.3, 500, 10); // Detensionare servoLock
+//
+//            /** Activate Tensor Flow Object Detection. */
+//            if (tfod != null) {
+//                tfod.activate();
+//            }
+//
+//            runtime.reset();
+//
+//            while (goldPos == -1 && tfod != null && runtime.seconds() < 5) {
+//                telemetry.addData("in", "while");
+//                telemetry.update();
+//                // getUpdatedRecognitions() will return null if no new information is available since
+//                // the last time that call was made.
+//                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+//                if (updatedRecognitions != null) {
+//                    telemetry.addData("# Object Detected", updatedRecognitions.size());
+//                    if (updatedRecognitions.size() <= 2) {
+//                        int goldMineralX = -1;
+//                        int silverMineral1X = -1;
+//                        int silverMineral2X = -1;
+//                        for (Recognition recognition : updatedRecognitions) {
+//                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+//                                goldMineralX = (int) recognition.getLeft();
+//                                recognition.getTop();
+//                            } else if (silverMineral1X == -1) {
+//                                silverMineral1X = (int) recognition.getLeft();
+//                            } else {
+//                                silverMineral2X = (int) recognition.getLeft();
+//                            }
+//                        }
+//                        if (goldMineralX != -1 && (silverMineral1X != -1 || silverMineral2X != -1)) {
+//                            if ((goldMineralX < silverMineral1X) || (goldMineralX < silverMineral2X)) {
+//                                goldPos = 0; // left
+//                            } else if ((goldMineralX > silverMineral1X) || (goldMineralX > silverMineral2X)) {
+//                                goldPos = 2; // center
+//                            }
+//                        }
+//
+//                        else {
+//                            goldPos = 1; // right
+//                        }
+//                    }
+//                }
+//            }
+//
+//            if (tfod != null) {
+//                tfod.shutdown();
+//            }
 
-            /** Activate Tensor Flow Object Detection. */
-            if (tfod != null) {
-                tfod.activate();
-            }
-
-            runtime.reset();
-
-            while (goldPos == -1 && tfod != null && runtime.seconds() < 5) {
-                telemetry.addData("in", "while");
-                telemetry.update();
-                // getUpdatedRecognitions() will return null if no new information is available since
-                // the last time that call was made.
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null) {
-                    telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    if (updatedRecognitions.size() <= 2) {
-                        int goldMineralX = -1;
-                        int silverMineral1X = -1;
-                        int silverMineral2X = -1;
-                        for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                goldMineralX = (int) recognition.getLeft();
-                                recognition.getTop();
-                            } else if (silverMineral1X == -1) {
-                                silverMineral1X = (int) recognition.getLeft();
-                            } else {
-                                silverMineral2X = (int) recognition.getLeft();
-                            }
-                        }
-                        if (goldMineralX != -1 && (silverMineral1X != -1 || silverMineral2X != -1)) {
-                            if ((goldMineralX < silverMineral1X) || (goldMineralX < silverMineral2X)) {
-                                goldPos = 0; // left
-                            } else if ((goldMineralX > silverMineral1X) || (goldMineralX > silverMineral2X)) {
-                                goldPos = 2; // center
-                            }
-                        }
-
-                        else {
-                            goldPos = 1; // right
-                        }
-                    }
-                }
-            }
-
-            tfod.shutdown();
-
-            /*
-            if(goldPos != -1) {
-                if (goldPos == 0) {
-                    telemetry.addData("Gold Mineral Position", "Left");
-                    leftGold();
-                    afterMineral();
-
-                } else if (goldPos == 1) {
-                    telemetry.addData("Gold Mineral Position", "Right");
-                    rightGold();
-                    afterMineral();
-
-                } else if (goldPos == 2){
-                    telemetry.addData("Gold Mineral Position", "Center");
-                    centerGold();
-                    afterMineral();
-                }
-                telemetry.addData("position", goldPos);
-                telemetry.update();
-            }
+//            if(goldPos != -1) {
+//                if (goldPos == 0) {
+//                    telemetry.addData("Gold Mineral Position", "Left");
+//                    leftGold();
+//                    afterMineral();
+//
+//                } else if (goldPos == 1) {
+//                    telemetry.addData("Gold Mineral Position", "Right");
+//                    rightGold();
+//                    afterMineral();
+//
+//                } else if (goldPos == 2){
+//                    telemetry.addData("Gold Mineral Position", "Center");
+//                    centerGold();
+//                    afterMineral();
+//                }
+//                telemetry.addData("position", goldPos);
+//                telemetry.update();
+//            }
 
 
-            else {
+//            else {
                 // Deplasare catre cubul din dreapta
-                movement.runEncoders(movement.cmToTicks(66), 0.3, 10);
-                movement.runEncodersLateral(movement.cmToTicks(21), 0.15, 4); // Senzorii de culoare indreptati spre cub sau bile
+
+
+                movement.runEncoders(movement.cmToTicks(20), 0.3, 10);
+                movement.runEncodersLateral(movement.cmToTicks(44), 0.5, 6); // Senzorii de culoare indreptati spre cub sau bile
                 runtime.reset();
 
                 while(runtime.seconds() < 5 && L != 1 && R != 1) {
@@ -371,17 +374,20 @@ public class CraterAutonomous extends LinearOpMode {
                     telemetry.addData("L=", L);
                     telemetry.addData("R=", R);
 
+                    telemetry.addData("Culoare1 ", colorsC);
+                    telemetry.addData("Culoare2 ", colorsL);
+
 
                     if (L == 1) {
-                        telemetry.addData("Cube: ", "Robot-Left");
+                        telemetry.addData("Cube: ", "Cube-Center");
                     }
 
                     else if (R == 1) {
-                        telemetry.addData("Cube: ", "Robot-Right");
+                        telemetry.addData("Cube: ", "Cube-Right");
                     }
 
                     else {
-                        telemetry.addData("Cube: ", "More left than men's bathroom");
+                        telemetry.addData("Cube: ", "More stanga than this fucking biroul din Campia");
                     }
 
 
@@ -390,21 +396,21 @@ public class CraterAutonomous extends LinearOpMode {
 
 
                 if (L == 1) {
-                    movement.runEncodersLateral(movement.cmToTicks(-21), 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+                    movement.runEncodersLateral(movement.cmToTicks(-23), 0.2, 3); // Deplasare cu centrul robotului in fata cubului
                     movement.runEncoders(movement.cmToTicks(10), 0.3, 2);
                     movement.runEncoders(movement.cmToTicks(-16), 0.3, 3); // Miscare cub si revenire la pozitia din TensorFlow ca sa nu mai gandesc atata cod :*
                     movement.runEncodersLateral(movement.cmToTicks(-160), 0.3, 4); // Deplasare spre culoar
                     rotate(0.25, -1, -45); // Orientare cu spatele la depou
                 }
                 else if (R == 1) {
-                    movement.runEncodersLateral(movement.cmToTicks(23), 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+                    movement.runEncodersLateral(movement.cmToTicks(23), 0.5, 3); // Deplasare cu centrul robotului in fata cubului
                     movement.runEncoders(movement.cmToTicks(10), 0.3, 2);
                     movement.runEncoders(movement.cmToTicks(-16), 0.3, 2); // Miscare cub si revenire la pozitia din TensorFlow
-                    movement.runEncodersLateral(movement.cmToTicks(-200), 0.3, 4); // Deplasare spre culoar
+                    movement.runEncodersLateral(movement.cmToTicks(-200), 0.5, 4); // Deplasare spre culoar
                     rotate(0.25, -1, -45); // Orientare cu spatele la depou
                 }
                 else {
-                    movement.runEncodersLateral(movement.cmToTicks(-64), 0.2, 8); // Deplasare cu centrul robotului in fata cubului
+                    movement.runEncodersLateral(movement.cmToTicks(-75), 0.2, 8); // Deplasare cu centrul robotului in fata cubului
                     movement.runEncoders(movement.cmToTicks(10), 0.3, 2);
                     movement.runEncoders(movement.cmToTicks(-16), 0.3, 2);
                     movement.runEncodersLateral(movement.cmToTicks(-120), 0.3, 4); // Deplasare spre culoar
@@ -413,7 +419,7 @@ public class CraterAutonomous extends LinearOpMode {
                 afterMineral();
 
 
-            } */
+//            }
 
         }
     }

@@ -68,9 +68,9 @@ public class RobotMovement {
         robot.stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.stangaFata.setTargetPosition(distance);
+        robot.stangaFata.setTargetPosition(-distance);
+        robot.stangaSpate.setTargetPosition(distance);
         robot.dreaptaFata.setTargetPosition(-distance);
-        robot.stangaSpate.setTargetPosition(-distance);
         robot.dreaptaSpate.setTargetPosition(distance);
 
         robot.stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -123,7 +123,11 @@ public class RobotMovement {
         robot.servoLock.setPosition(0);
 
         runtime.reset();
-        while (runtime.seconds() < 3);
+        while (runtime.seconds() < 2);
+
+        // Detensionare servoLock
+
+        runEncoders(cmToTicks(20), 0.4, 2);
 
         // Coborare brat
         robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
