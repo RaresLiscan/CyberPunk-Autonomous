@@ -95,8 +95,6 @@ public class RobotMovement {
     }
 
     void land (double power, int distance, int timeout) {
-        robot.servoCarlig.setPosition(1);
-        runtime.reset();
 
         robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -116,25 +114,29 @@ public class RobotMovement {
 
         while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && runtime.seconds() < timeout) {
             // Wait for the motors to run
+            if (runtime.seconds() >= 0.3) robot.servoCarlig.setPosition(1);
         }
 
         robot.bratStanga.setPower(0);
         robot.bratDreapta.setPower(0);
-        robot.servoLock.setPosition(0);
 
         runtime.reset();
         while (runtime.seconds() < 2);
+        runtime.reset();
+        robot.servoLock.setPosition(0);
+        robot.servoCarlig.setPosition(0);
+        while (runtime.seconds() < 0.5);
 
         // Detensionare servoLock
 
-        runEncoders(cmToTicks(20), 0.4, 2);
+        runEncoders(cmToTicks(10), 0.4, 2);
 
         // Coborare brat
         robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.bratStanga.setTargetPosition(-1200);
-        robot.bratDreapta.setTargetPosition(1200);
+        robot.bratStanga.setTargetPosition(-1500);
+        robot.bratDreapta.setTargetPosition(1500);
 
         robot.bratStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.bratDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);

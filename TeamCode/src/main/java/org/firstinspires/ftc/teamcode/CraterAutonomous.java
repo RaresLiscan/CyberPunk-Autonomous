@@ -279,9 +279,9 @@ public class CraterAutonomous extends LinearOpMode {
 
         if (opModeIsActive()) {
 
-            movement.land(0.3, 500, 10); // Detensionare servoLock
-//
-//            /** Activate Tensor Flow Object Detection. */
+//            movement.land(0.3, 520, 10); // Detensionare servoLock
+
+            /** Activate Tensor Flow Object Detection. */
 //            if (tfod != null) {
 //                tfod.activate();
 //            }
@@ -312,14 +312,14 @@ public class CraterAutonomous extends LinearOpMode {
 //                        }
 //                        if (goldMineralX != -1 && (silverMineral1X != -1 || silverMineral2X != -1)) {
 //                            if ((goldMineralX < silverMineral1X) || (goldMineralX < silverMineral2X)) {
-//                                goldPos = 0; // left
-//                            } else if ((goldMineralX > silverMineral1X) || (goldMineralX > silverMineral2X)) {
 //                                goldPos = 2; // center
+//                            } else if ((goldMineralX > silverMineral1X) || (goldMineralX > silverMineral2X)) {
+//                                goldPos = 1; // right
 //                            }
 //                        }
 //
 //                        else {
-//                            goldPos = 1; // right
+//                            goldPos = 0; // left
 //                        }
 //                    }
 //                }
@@ -348,81 +348,81 @@ public class CraterAutonomous extends LinearOpMode {
 //                telemetry.addData("position", goldPos);
 //                telemetry.update();
 //            }
-
-
+//
+//
 //            else {
-                // Deplasare catre cubul din dreapta
-
-
+//                // Deplasare catre cubul din dreapta
+//
+//
                 movement.runEncoders(movement.cmToTicks(20), 0.3, 10);
-                movement.runEncodersLateral(movement.cmToTicks(44), 0.5, 6); // Senzorii de culoare indreptati spre cub sau bile
+                movement.runEncodersLateral(movement.cmToTicks(44), 0.35, 6); // Senzorii de culoare indreptati spre cub sau bile
                 runtime.reset();
 
-                while(runtime.seconds() < 5 && L != 1 && R != 1) {
-                    NormalizedRGBA colorsC = robot.colorSensorRight.getNormalizedColors();
-                    NormalizedRGBA colorsL = robot.colorSensorLeft.getNormalizedColors();
+//                while(runtime.seconds() < 5 && L != 1 && R != 1) {
+//                    NormalizedRGBA colorsC = robot.colorSensorRight.getNormalizedColors();
+//                    NormalizedRGBA colorsL = robot.colorSensorLeft.getNormalizedColors();
+//
+//
+//                    Color.colorToHSV(colorsC.toColor(), hsvValuesR);
+//                    Color.colorToHSV(colorsL.toColor(), hsvValuesL);
+//
+//
+//                    L=hsvValuesL[0]<70&&hsvValuesL[2]<0.02 ? (hsvValuesL[0]<10 ? -1 : 1) : 0; // 1 == cub, 0==bila, -1==teren
+//                    R=hsvValuesR[0]<70&&hsvValuesR[2]<0.02 ? (hsvValuesR[0]<10 ? -1 : 1) : 0;
+//
+//
+//                    telemetry.addData("L=", L);
+//                    telemetry.addData("R=", R);
+//
+//                    telemetry.addData("Culoare1 ", colorsC);
+//                    telemetry.addData("Culoare2 ", colorsL);
+//
+//
+//                    if (L == 1) {
+//                        telemetry.addData("Cube: ", "Cube-Center");
+//                    }
+//
+//                    else if (R == 1) {
+//                        telemetry.addData("Cube: ", "Cube-Right");
+//                    }
+//
+//                    else {
+//                        telemetry.addData("Cube: ", "Cube-Left");
+//                    }
+//
+//
+//                    telemetry.update();
+//                }
+//
+//
+//                if (L == 1) {
+//                    movement.runEncodersLateral(movement.cmToTicks(-23), 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+//                    movement.runEncoders(movement.cmToTicks(10), 0.3, 2);
+//                    movement.runEncoders(movement.cmToTicks(-16), 0.3, 3); // Miscare cub si revenire la pozitia din TensorFlow ca sa nu mai gandesc atata cod :*
+//                    movement.runEncodersLateral(movement.cmToTicks(-160), 0.3, 4); // Deplasare spre culoar
+//                    rotate(0.25, -1, -45); // Orientare cu spatele la depou
+//                }
+//                else if (R == 1) {
+//                    movement.runEncodersLateral(movement.cmToTicks(23), 0.5, 3); // Deplasare cu centrul robotului in fata cubului
+//                    movement.runEncoders(movement.cmToTicks(10), 0.3, 2);
+//                    movement.runEncoders(movement.cmToTicks(-16), 0.3, 2); // Miscare cub si revenire la pozitia din TensorFlow
+//                    movement.runEncodersLateral(movement.cmToTicks(-200), 0.5, 4); // Deplasare spre culoar
+//                    rotate(0.25, -1, -45); // Orientare cu spatele la depou
+//                }
+//                else {
+//                    movement.runEncodersLateral(movement.cmToTicks(-75), 0.2, 8); // Deplasare cu centrul robotului in fata cubului
+//                    movement.runEncoders(movement.cmToTicks(10), 0.3, 2);
+//                    movement.runEncoders(movement.cmToTicks(-16), 0.3, 2);
+//                    movement.runEncodersLateral(movement.cmToTicks(-120), 0.3, 4); // Deplasare spre culoar
+//                    rotate(0.25, -1, -45); // Orientare cu spatele la depou
+//                }
+//                afterMineral();
 
 
-                    Color.colorToHSV(colorsC.toColor(), hsvValuesR);
-                    Color.colorToHSV(colorsL.toColor(), hsvValuesL);
-
-
-                    L=hsvValuesL[0]<70&&hsvValuesL[2]<0.02 ? (hsvValuesL[0]<10 ? -1 : 1) : 0; // 1 == cub, 0==bila, -1==teren
-                    R=hsvValuesR[0]<70&&hsvValuesR[2]<0.02 ? (hsvValuesR[0]<10 ? -1 : 1) : 0;
-
-
-                    telemetry.addData("L=", L);
-                    telemetry.addData("R=", R);
-
-                    telemetry.addData("Culoare1 ", colorsC);
-                    telemetry.addData("Culoare2 ", colorsL);
-
-
-                    if (L == 1) {
-                        telemetry.addData("Cube: ", "Cube-Center");
-                    }
-
-                    else if (R == 1) {
-                        telemetry.addData("Cube: ", "Cube-Right");
-                    }
-
-                    else {
-                        telemetry.addData("Cube: ", "More stanga than this fucking biroul din Campia");
-                    }
-
-
-                    telemetry.update();
-                }
-
-
-                if (L == 1) {
-                    movement.runEncodersLateral(movement.cmToTicks(-23), 0.2, 3); // Deplasare cu centrul robotului in fata cubului
-                    movement.runEncoders(movement.cmToTicks(10), 0.3, 2);
-                    movement.runEncoders(movement.cmToTicks(-16), 0.3, 3); // Miscare cub si revenire la pozitia din TensorFlow ca sa nu mai gandesc atata cod :*
-                    movement.runEncodersLateral(movement.cmToTicks(-160), 0.3, 4); // Deplasare spre culoar
-                    rotate(0.25, -1, -45); // Orientare cu spatele la depou
-                }
-                else if (R == 1) {
-                    movement.runEncodersLateral(movement.cmToTicks(23), 0.5, 3); // Deplasare cu centrul robotului in fata cubului
-                    movement.runEncoders(movement.cmToTicks(10), 0.3, 2);
-                    movement.runEncoders(movement.cmToTicks(-16), 0.3, 2); // Miscare cub si revenire la pozitia din TensorFlow
-                    movement.runEncodersLateral(movement.cmToTicks(-200), 0.5, 4); // Deplasare spre culoar
-                    rotate(0.25, -1, -45); // Orientare cu spatele la depou
-                }
-                else {
-                    movement.runEncodersLateral(movement.cmToTicks(-75), 0.2, 8); // Deplasare cu centrul robotului in fata cubului
-                    movement.runEncoders(movement.cmToTicks(10), 0.3, 2);
-                    movement.runEncoders(movement.cmToTicks(-16), 0.3, 2);
-                    movement.runEncodersLateral(movement.cmToTicks(-120), 0.3, 4); // Deplasare spre culoar
-                    rotate(0.25, -1, -45); // Orientare cu spatele la depou
-                }
-                afterMineral();
-
-
-//            }
-
+            }
+//
         }
-    }
+//    }
     /**
      * Initialize the Vuforia localization engine.
      */
