@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
@@ -63,6 +64,8 @@ public class RobotMap
         extindereBrat     = hwMap.get(DcMotor.class, "extindereBrat");
         colorSensorRight = hwMap.get(NormalizedColorSensor.class, "colorRight" );
         colorSensorLeft   = hwMap.get(NormalizedColorSensor.class, "colorLeft" );
+
+        extindereBrat.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
 //        // Default initializations

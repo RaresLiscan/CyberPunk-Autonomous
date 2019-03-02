@@ -52,18 +52,18 @@ public class CraterAutonomous extends LinearOpMode {
      * and paste it in to your code on the next line, between the double quotes.
      */
     private static final String VUFORIA_KEY = "AVkOf0j/////AAABmRjwq1ZdP0O/htcXkMim08CHBQt3z5YM6hHnfFqlJNDQbZf/M093kM6IX5wdvKvZox6Skid1Hw1FVuIr1PLvCtHY+q771YzcambEV+cAkbH/rJ3Z+0dbdiPAH6QycOPOWJqNT38H5uW8O2iXiT5IsUnlqph2E2Vl30s8ICcLl6+4TtLskwZlsUKr5QmqJROFmzMo/BCEBqmxb1njxKmjolTZcKiBGdAHKvI+Xh4rzXzJr4MO3mrDeHyLi/QIHTx5R5u6vpfQNavMEWKXA+pMCarpR/MLPwPI7anUwfRAKXaBz08it+5Fu2c1iXh/hmwLvujZVgRWQcHyAd4k7eT49cBsZvLvrhdgxcbux1YX92Oq";
-
-    /**
-     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
-     * localization engine.
-     */
-    private VuforiaLocalizer vuforia;
-
-    /**
-     * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
-     * Detection engine.
-     */
-    private TFObjectDetector tfod;
+//
+//    /**
+//     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
+//     * localization engine.
+//     */
+//    private VuforiaLocalizer vuforia;
+//
+//    /**
+//     * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
+//     * Detection engine.
+//     */
+//    private TFObjectDetector tfod;
 
     //End of Vuforia / Tensorflow methods
     //Start of motor declarations and custom methods
@@ -77,6 +77,8 @@ public class CraterAutonomous extends LinearOpMode {
     void rotate(double power, int direction, int degrees) {
         robot.stangaFata.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.dreaptaFata.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.dreaptaSpate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.stangaSpate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         power = power * direction;
         gyroInit();
         if (direction == 1 && fa < degrees) {
@@ -242,14 +244,14 @@ public class CraterAutonomous extends LinearOpMode {
 
         robot.init(hardwareMap);
 
-        initVuforia();
-
-
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod();
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        }
+//        initVuforia();
+//
+//
+//        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+//            initTfod();
+//        } else {
+//            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+//        }
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -354,9 +356,18 @@ public class CraterAutonomous extends LinearOpMode {
 //                // Deplasare catre cubul din dreapta
 //
 //
-                movement.runEncoders(movement.cmToTicks(20), 0.3, 10);
-                movement.runEncodersLateral(movement.cmToTicks(44), 0.35, 6); // Senzorii de culoare indreptati spre cub sau bile
-                runtime.reset();
+
+            movement.land(0.3, 100, 10);
+            telemetry.addData("Robot Stopped", "!");
+            movement.runEncodersLateral(movement.cmToTicks(-135), 0.85, 10); // Senzorii de culoare indreptati spre cub sau bile
+            rotate(0.7, 1, 134);
+            movement.runEncoders(movement.cmToTicks(150), 1, 10);
+            robot.servoMarker.setPosition(0);
+            sleep(500);
+            robot.servoMarker.setPosition(1);
+            movement.runEncoders(movement.cmToTicks(-250), 1, 7);
+
+            runtime.reset();
 
 //                while(runtime.seconds() < 5 && L != 1 && R != 1) {
 //                    NormalizedRGBA colorsC = robot.colorSensorRight.getNormalizedColors();
@@ -419,18 +430,11 @@ public class CraterAutonomous extends LinearOpMode {
 //                afterMineral();
 
 
-            }
-//
         }
+//
+    }
 //    }
-    /**
-     * Initialize the Vuforia localization engine.
-     */
 
-
-    /**
-     * Initialize the Tensor Flow Object Detection engine.
-     */
     public void gyroInit() {
 
         // At the beginning of each telemetry update, grab a bunch of data
@@ -443,28 +447,28 @@ public class CraterAutonomous extends LinearOpMode {
         ta = Double.parseDouble(formatAngle(angles.angleUnit, angles.thirdAngle));
     }
 
-    private void initVuforia() {
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
-    }
-
-    private void initTfod() {
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
-    }
+//    private void initVuforia() {
+//        /*
+//         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+//         */
+//        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+//
+//        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+//        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+//
+//        //  Instantiate the Vuforia engine
+//        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+//
+//        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
+//    }
+//
+//    private void initTfod() {
+//        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+//                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+//        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+//        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+//    }
 
     String formatAngle(AngleUnit angleUnit, double angle) {
         return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));

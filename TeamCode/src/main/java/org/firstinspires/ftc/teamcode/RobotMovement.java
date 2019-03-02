@@ -31,6 +31,26 @@ public class RobotMovement {
         robot.dreaptaSpate.setPower(0);
     }
 
+    void rotateArm (int distance, double power, double timeout) {
+        robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.bratStanga.setTargetPosition(distance);
+        robot.bratDreapta.setTargetPosition(-distance);
+
+        robot.bratDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.bratStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        runtime.reset();
+        robot.bratStanga.setPower(power);
+        robot.bratDreapta.setPower(power);
+
+        while (robot.bratDreapta.isBusy() && robot.bratStanga.isBusy() && runtime.seconds() < timeout);
+
+        robot.bratStanga.setPower(0);
+        robot.bratStanga.setPower(0);
+    }
+
     void runEncoders (int distance, double power, double timeoutS) {
         robot.stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -112,46 +132,91 @@ public class RobotMovement {
         robot.bratDreapta.setPower(power);
 
 
-        while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && runtime.seconds() < timeout) {
+        while ((robot.bratStanga.isBusy() && robot.bratDreapta.isBusy()) && runtime.seconds() < timeout) {
             // Wait for the motors to run
-            if (runtime.seconds() >= 0.3) robot.servoCarlig.setPosition(1);
+            if (runtime.seconds() >= 0.2) robot.servoCarlig.setPosition(1);
         }
 
         robot.bratStanga.setPower(0);
         robot.bratDreapta.setPower(0);
 
         runtime.reset();
-        while (runtime.seconds() < 2);
+        while (runtime.seconds() < 1.5);
         runtime.reset();
         robot.servoLock.setPosition(0);
-        robot.servoCarlig.setPosition(0);
+//        robot.servoCarlig.setPosition(0);
+
         while (runtime.seconds() < 0.5);
-
-        // Detensionare servoLock
-
-        runEncoders(cmToTicks(10), 0.4, 2);
 
         // Coborare brat
         robot.bratStanga.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.bratDreapta.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.stangaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.dreaptaFata.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.stangaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.dreaptaSpate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.bratStanga.setTargetPosition(-1500);
-        robot.bratDreapta.setTargetPosition(1500);
+        int d = cmToTicks(32);
+        robot.bratStanga.setTargetPosition(-1700);
+        robot.bratDreapta.setTargetPosition(1700);
+        robot.stangaFata.setTargetPosition(-d);
+        robot.dreaptaFata.setTargetPosition(d);
+        robot.stangaSpate.setTargetPosition(-d);
+        robot.dreaptaSpate.setTargetPosition(d);
 
         robot.bratStanga.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.bratDreapta.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.stangaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.dreaptaFata.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.stangaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.dreaptaSpate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         runtime.reset();
 
         robot.bratStanga.setPower(power);
         robot.bratDreapta.setPower(power);
+        robot.stangaFata.setPower(0.85);
+        robot.dreaptaFata.setPower(0.85);
+        robot.stangaSpate.setPower(0.85);
+        robot.dreaptaSpate.setPower(0.85);
 
 
-        while (robot.bratStanga.isBusy() && robot.bratDreapta.isBusy() && runtime.seconds() < timeout) {
-            // Wait for the motors to run
+        while ( ((robot.bratStanga.isBusy() && robot.bratDreapta.isBusy()) || (robot.stangaFata.isBusy() && robot.dreaptaFata.isBusy()
+                && robot.stangaSpate.isBusy() && robot.dreaptaSpate.isBusy())))
+        {
+            if (!(robot.bratStanga.isBusy() && robot.bratDreapta.isBusy()))
+            {
+                robot.bratStanga.setPower(0);
+                robot.bratDreapta.setPower(0);
+            }
+
+            if (!(robot.stangaFata.isBusy() && robot.dreaptaFata.isBusy() && robot.stangaSpate.isBusy() && robot.dreaptaSpate.isBusy()))
+            {
+                robot.stangaFata.setPower(0);
+                robot.dreaptaFata.setPower(0);
+                robot.stangaSpate.setPower(0);
+                robot.dreaptaSpate.setPower(0);
+                return;
+            }
+
+            if (!(robot.bratStanga.isBusy() && robot.bratDreapta.isBusy()) && !(robot.stangaFata.isBusy() && robot.dreaptaFata.isBusy()
+                    && robot.stangaSpate.isBusy() && robot.dreaptaSpate.isBusy())) {
+                robot.bratStanga.setPower(0);
+                robot.bratDreapta.setPower(0);
+                robot.stangaFata.setPower(0);
+                robot.dreaptaFata.setPower(0);
+                robot.stangaSpate.setPower(0);
+                robot.dreaptaSpate.setPower(0);
+                return;
+            }
         }
 
         robot.bratStanga.setPower(0);
         robot.bratDreapta.setPower(0);
+        robot.stangaFata.setPower(0);
+        robot.dreaptaFata.setPower(0);
+        robot.stangaSpate.setPower(0);
+        robot.dreaptaSpate.setPower(0);
+        return;
     }
 }

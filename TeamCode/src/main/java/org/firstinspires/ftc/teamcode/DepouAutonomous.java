@@ -106,8 +106,8 @@ public class DepouAutonomous extends LinearOpMode {
             movement.stopDriving();
         }
     }
-    
-    
+
+
     public void leftGold()
     {
         movement.runEncoders(625, 0.25, 10);
@@ -299,11 +299,11 @@ public class DepouAutonomous extends LinearOpMode {
         //initVuforia(); - moved to RobotMap; still here in case it does not work TODO: Test camera with the new RobotMap
 
 
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod();
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        }
+//        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+//            initTfod();
+//        } else {
+//            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+//        }
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -322,12 +322,12 @@ public class DepouAutonomous extends LinearOpMode {
         telemetry.addData(">", "Press Play to start tracking");
         telemetry.update();
 
-        robot.stangaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.dreaptaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.stangaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.dreaptaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.bratStanga.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.bratDreapta.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.stangaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.dreaptaFata.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.stangaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.dreaptaSpate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.bratStanga.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.bratDreapta.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         robot.servoMarker.setPosition(1);
         gyroInit();
         waitForStart();
@@ -337,162 +337,169 @@ public class DepouAutonomous extends LinearOpMode {
             /** Activate Tensor Flow Object Detection. */
 
 
-            if (tfod != null) {
-                tfod.activate();
-            }
+//            if (tfod != null) {
+//                tfod.activate();
+//            }
 
 
 
             runtime.reset();
 
-            while (goldPos == -1 && tfod != null && runtime.seconds() < 5) {
-                telemetry.addData("in","while" );
-                telemetry.update();
-                // getUpdatedRecognitions() will return null if no new information is available since
-                // the last time that call was made.
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null) {
-                    telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    if (updatedRecognitions.size() <= 3) {
-                        int goldMineralX = -1;
-                        int silverMineral1X = -1;
-                        int silverMineral2X = -1;
-                        for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                goldMineralX = (int) recognition.getLeft();
-                                recognition.getTop();
-                            } else if (silverMineral1X == -1) {
-                                silverMineral1X = (int) recognition.getLeft();
-                            } else {
-                                silverMineral2X = (int) recognition.getLeft();
-                            }
-                        }
-                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                goldPos = 0;
-                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                goldPos = 1;
-                            } else {
-                                goldPos = 2;
-                            }
-                        }
-                    }
+//            while (goldPos == -1 && tfod != null && runtime.seconds() < 5) {
+//                telemetry.addData("in","while" );
+//                telemetry.update();
+//                // getUpdatedRecognitions() will return null if no new information is available since
+//                // the last time that call was made.
+//                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+//                if (updatedRecognitions != null) {
+//                    telemetry.addData("# Object Detected", updatedRecognitions.size());
+//                    if (updatedRecognitions.size() <= 3) {
+//                        int goldMineralX = -1;
+//                        int silverMineral1X = -1;
+//                        int silverMineral2X = -1;
+//                        for (Recognition recognition : updatedRecognitions) {
+//                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+//                                goldMineralX = (int) recognition.getLeft();
+//                                recognition.getTop();
+//                            } else if (silverMineral1X == -1) {
+//                                silverMineral1X = (int) recognition.getLeft();
+//                            } else {
+//                                silverMineral2X = (int) recognition.getLeft();
+//                            }
+//                        }
+//                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+//                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+//                                goldPos = 0;
+//                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+//                                goldPos = 1;
+//                            } else {
+//                                goldPos = 2;
+//                            }
+//                        }
+//                    }
+//
+//                }
+//            }
+//
+//            tfod.shutdown();
 
-                }
-            }
+            movement.land(0.3, 100, 10);
+            movement.runEncoders(movement.cmToTicks(60), 1, 5);
+            robot.servoMarker.setPosition(0);
+            sleep(500);
+            robot.servoMarker.setPosition(1);
+            rotate(0.7, 1, 44);
+            movement.runEncoders(movement.cmToTicks(-200), 1, 10);
+            movement.rotateArm(1400, 0.6, 5);
 
-            tfod.shutdown();
+//            if(goldPos != -1) {
+//                if (goldPos == 0) {
+//                    telemetry.addData("Gold Mineral Position", "Left");
+//                    leftGold();
+//                    afterMineral(goldPos);
+//
+//                } else if (goldPos == 1) {
+//                    telemetry.addData("Gold Mineral Position", "Right");
+//                    rightGold();
+//                    afterMineral(goldPos);
+//
+//                } else if (goldPos == 2){
+//                    telemetry.addData("Gold Mineral Position", "Center");
+//                    centerGold();
+//                    afterMineral(goldPos);
+//                }
+//                telemetry.addData("position", goldPos);
+//                telemetry.update();
+//
+//            }
+//
+//
+//            else {
 
-            movement.land(0.3, 500, 2); // Detensionare servoLock
+//                movement.runEncoders(2650, 0.3, 10);
+//                movement.runEncodersLateral(-1500, 0.15, 4);
+//                runtime.reset();
 
-            if(goldPos != -1) {
-                if (goldPos == 0) {
-                    telemetry.addData("Gold Mineral Position", "Left");
-                    leftGold();
-                    afterMineral(goldPos);
-
-                } else if (goldPos == 1) {
-                    telemetry.addData("Gold Mineral Position", "Right");
-                    rightGold();
-                    afterMineral(goldPos);
-
-                } else if (goldPos == 2){
-                    telemetry.addData("Gold Mineral Position", "Center");
-                    centerGold();
-                    afterMineral(goldPos);
-                }
-                telemetry.addData("position", goldPos);
-                telemetry.update();
-
-            }
-
-
-            else {
-
-                movement.runEncoders(2650, 0.3, 10);
-                movement.runEncodersLateral(-1500, 0.15, 4);
-                runtime.reset();
-
-                while(runtime.seconds() < 5) {
-                    NormalizedRGBA colorsC = robot.colorSensorRight.getNormalizedColors();
-                    NormalizedRGBA colorsL = robot.colorSensorLeft.getNormalizedColors();
-
-
-                    Color.colorToHSV(colorsC.toColor(), hsvValuesR);
-                    Color.colorToHSV(colorsL.toColor(), hsvValuesL);
-
-
-                    L=hsvValuesL[0]<70&&hsvValuesL[2]<0.02 ? (hsvValuesL[0]<10 ? -1 : 1) : 0; // 1 == cub, 0==bila, -1==teren
-                    R=hsvValuesR[0]<70&&hsvValuesR[2]<0.02 ? (hsvValuesR[0]<10 ? -1 : 1) : 0;
-
-
-                    telemetry.addData("L=", L);
-                    telemetry.addData("R=", R);
-
-
-                    if (L == 1) {
-                        telemetry.addData("Cube: ", "Left");
-                    }
-
-                    else if (R == 1) {
-                        telemetry.addData("Cube: ", "Center");
-                    }
-
-                    else {
-                        telemetry.addData("Cube: ", "Right");
-                    }
-
-
-                    telemetry.update();
-                }
-
-
-                if (L == 1) {
-                    movement.runEncodersLateral(-350, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
-                    rotate(0.3, -1, -23);
-                    movement.runEncoders(1850,0.25,15);
-                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
-                    /*Dau drumul la robot.servoMarker*/
-                    robot.servoMarker.setPosition(0);
-                    movement.runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
-                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
-                    robot.extindereBrat.setPower(0.4); // "Parcare"
-                    sleep(1500);
-                    robot.extindereBrat.setPower(0);
-
-                }
-                else if (R == 1) {
-                    movement.runEncodersLateral(650, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
-                    rotate(0.25, 1, 23); // Fata spre cubul din dreapta
-                    movement.runEncoders(1617,0.25,15); // Catre depou
-                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
-                    /*Dau drumul la robot.servoMarker*/
-                    robot.servoMarker.setPosition(0);
-                    movement.runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
-                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
-                    robot.extindereBrat.setPower(0.4); // "Parcare"
-                    sleep(1500);
-                    robot.extindereBrat.setPower(0);
-                }
-                else {
-                    movement.runEncodersLateral(350, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
-                    movement.runEncoders(3000,0.2,6);
-                    //runLateral(1, 40, 0.15, 4);
-                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
-                    /*Dau drumul la robot.servoMarker*/
-                    robot.servoMarker.setPosition(0);
-                    movement.runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
-                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
-                    robot.extindereBrat.setPower(0.4); // "Parcare"
-                    sleep(1500);
-                    robot.extindereBrat.setPower(0);
-                }
-
-
-            }
-
+//                while(runtime.seconds() < 5) {
+//                    NormalizedRGBA colorsC = robot.colorSensorRight.getNormalizedColors();
+//                    NormalizedRGBA colorsL = robot.colorSensorLeft.getNormalizedColors();
+//
+//
+//                    Color.colorToHSV(colorsC.toColor(), hsvValuesR);
+//                    Color.colorToHSV(colorsL.toColor(), hsvValuesL);
+//
+//
+//                    L=hsvValuesL[0]<70&&hsvValuesL[2]<0.02 ? (hsvValuesL[0]<10 ? -1 : 1) : 0; // 1 == cub, 0==bila, -1==teren
+//                    R=hsvValuesR[0]<70&&hsvValuesR[2]<0.02 ? (hsvValuesR[0]<10 ? -1 : 1) : 0;
+//
+//
+//                    telemetry.addData("L=", L);
+//                    telemetry.addData("R=", R);
+//
+//
+//                    if (L == 1) {
+//                        telemetry.addData("Cube: ", "Left");
+//                    }
+//
+//                    else if (R == 1) {
+//                        telemetry.addData("Cube: ", "Center");
+//                    }
+//
+//                    else {
+//                        telemetry.addData("Cube: ", "Right");
+//                    }
+//
+//
+//                    telemetry.update();
+//                }
+//
+//
+//                if (L == 1) {
+//                    movement.runEncodersLateral(-350, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+//                    rotate(0.3, -1, -23);
+//                    movement.runEncoders(1850,0.25,15);
+//                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
+//                    /*Dau drumul la robot.servoMarker*/
+//                    robot.servoMarker.setPosition(0);
+//                    movement.runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
+//                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
+//                    robot.extindereBrat.setPower(0.4); // "Parcare"
+//                    sleep(1500);
+//                    robot.extindereBrat.setPower(0);
+//
+//                }
+//                else if (R == 1) {
+//                    movement.runEncodersLateral(650, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+//                    rotate(0.25, 1, 23); // Fata spre cubul din dreapta
+//                    movement.runEncoders(1617,0.25,15); // Catre depou
+//                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
+//                    /*Dau drumul la robot.servoMarker*/
+//                    robot.servoMarker.setPosition(0);
+//                    movement.runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
+//                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
+//                    robot.extindereBrat.setPower(0.4); // "Parcare"
+//                    sleep(1500);
+//                    robot.extindereBrat.setPower(0);
+//                }
+//                else {
+//                    movement.runEncodersLateral(350, 0.2, 3); // Deplasare cu centrul robotului in fata cubului
+//                    movement.runEncoders(3000,0.2,6);
+//                    //runLateral(1, 40, 0.15, 4);
+//                    rotate(0.25, 1, 40); // Laterala stanga la Craterul inamic
+//                    /*Dau drumul la robot.servoMarker*/
+//                    robot.servoMarker.setPosition(0);
+//                    movement.runEncodersLateral(-4000, 0.4, 10); // Catre Craterul inamic
+//                    rotate(0.25, 1, 40); // Orientare robot cu fata la Crater
+//                    robot.extindereBrat.setPower(0.4); // "Parcare"
+//                    sleep(1500);
+//                    robot.extindereBrat.setPower(0);
+//                }
+//
+//
         }
+
     }
+//    }
     /**
      * Initialize the Vuforia localization engine.
      */
